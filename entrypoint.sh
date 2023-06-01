@@ -9,5 +9,9 @@ crontab -l
 
 echo "==================== Task created..."
 
+echo "==================== Running first time..."
+/usr/local/bin/python /app/plsgrabber.py
+
+echo "==================== Starting cron..."
 # Start cron in the foreground
 exec cron -f
