@@ -8,7 +8,7 @@ env | grep CRON_
 
 echo "==================== Setting up cron task..."
 # Set up the cron job
-echo "$CRON_SCHEDULE /usr/local/bin/python /app/plsgrabber.py > /proc/1/fd/1 2>&1" | crontab -
+echo "$CRON_SCHEDULE env INFLUX_HOST_PORT=$INFLUX_HOST_PORT INFLUX_ORG=$INFLUX_ORG INFLUX_BUCKET=$INFLUX_BUCKET INFLUX_KEY=$INFLUX_KEY PLS_PRICE_URI=$PLS_PRICE_URI PLS_LAUNCH_URI=$PLS_LAUNCH_URI /usr/local/bin/python /app/plsgrabber.py > /proc/1/fd/1 2>&1" | crontab -
 
 echo "==================== Task created..."
 crontab -l
