@@ -20,6 +20,9 @@ my_envars = []
 page_data = []
 logging.getLogger().setLevel(logging.INFO)
 
+def get_time():
+    return time.strftime("%d/%m/%Y %H:%M:%S")
+
 # checking required env vars
 for env_var in env_vars:
     if os.environ.get(env_var) is None:
@@ -29,7 +32,7 @@ for env_var in env_vars:
         my_envars.append(os.environ.get(env_var))
         
 if not everything_ok:
-    print(f"The following environment variables are missing: {', '.join(not_set)}. Please refer to documentation to fix this issue.")
+    print(f"{get_time()} | The following environment variables are missing: {', '.join(not_set)}. Please refer to documentation to fix this issue.")
 else:
     # get PLS price
     try:
@@ -37,7 +40,7 @@ else:
         data = json.loads(response.text)
         price_usd = float(data['pair']['priceUsd'])
     except Exception as e:
-        logging.info('Error getting data from price page: ' + str(e))
+        logging.info(f"{get_time()} | Error getting data from price page: {str(e)}")
         everything_ok = False
     
     # get PLS Total Staked, Validator count and APR
@@ -45,14 +48,14 @@ else:
     try:
         display = Display(visible=0, size=(1920, 1080))
         display.start()
-        logging.info('Virtual display initialized.')
+        logging.info(f"{get_time()} | Virtual display initialized.")
     except Exception as e:
-        logging.info('Virtual display not needed, using gecko.')
+        logging.info(f"{get_time()} | Virtual display not needed, using gecko.")
 
     try:
         # creating Selenium browser object
         browser = webdriver.Firefox()
-        logging.info('Opening %s', my_envars[5])
+        logging.info(f"{get_time()} | Opening {my_envars[5]}")
         browser.get(my_envars[5])
         time.sleep(5)
         browser.implicitly_wait(10)
@@ -69,7 +72,7 @@ else:
             text = float(text)
             page_data.append(text)
     except Exception as e:
-        logging.info('Error getting data from launchpad page: ' + str(e))
+        logging.info(f"{get_time()} | Error getting data from launchpad page: {str(e)}")
         everything_ok = False
         
 # writing data to influxdb
@@ -83,12 +86,12 @@ if everything_ok:
         write_api = client.write_api(write_options=SYNCHRONOUS)
         p = influxdb_client.Point("pls_data").field("pls_price", price_usd).field("pls_staked", page_data[0]).field("pls_validators", page_data[1]).field("pls_apr", page_data[2])
         write_api.write(bucket=f"{my_envars[2]}", record=p)
-        logging.info('Data written to influxdb.')
+        logging.info(f"{get_time()} | Data written to influxdb.")
     except Exception as e:
-        logging.info('Error writing data to influxdb: ' + str(e))
+        logging.info(f"{get_time()} | Error writing data to influxdb: {str(e)}")
         everything_ok = False
 
 if everything_ok:
-    logging.info('Everything OK.')
+    logging.info(f"{get_time()} | Everything OK! Done!")
 else:
-    logging.info('Something went wrong, please check logs for more info.')
+    logging.info(f"{get_time()} | Something went wrong, please check logs for more info.")
