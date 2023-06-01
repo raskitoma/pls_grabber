@@ -5,7 +5,7 @@ This is an script that runs periodically to multiple data from PLS and stores it
 
 ## Installation
 
-1. Assuming you have a properly running InfluxDB instance, create a bucket and a token with write access.
+1. Assuming you have a properly running InfluxDB instance, create a bucket(`pls`) and a token with write access.
 
 2. git clone this repo.
 
@@ -13,7 +13,7 @@ This is an script that runs periodically to multiple data from PLS and stores it
 
 > - `INFLUX_HOST_PORT` - The host where your InfluxDB is running
 > - `INFLUX_ORG` - The organization where you created the bucket and token
-> - `INFLUX_BUCKET` - The bucket where you want to store the data
+> - `INFLUX_BUCKET` - The bucket where you want to store the data, default is `pls`
 > - `INFLUX_KEY` - The token with write access to the bucket
 > - `PLS_PRICE_URI` - URL to get price data, Default is Dexscreener API.
 > - `PLS_LAUNCH_URI` - URL where PLS staking, validator and APR resides. Default is PLS launchpad site.
@@ -22,6 +22,13 @@ This is an script that runs periodically to multiple data from PLS and stores it
 4. Run with `docker-compose.yml build && docker-compose.yml up -d`. Please be patient, it takes a while, because it has to install some packages and, since it depends on Selenium, it has to download the browser and the driver.
 
 5. You can see the logs with `docker-compose.yml logs -f`
+
+## Grafana Dashboard
+
+There is a dashboard called `pls_network_dashboard.json` so you can import into your Grafana instance. It requires the following:
+
+- An InfluxDB datasource with a bucket called `pls` (the same you use for data store with the script, but use a token with read access only.)
+- A Prometheus datasource that has your node's metrics.
 
 ## Updates
 
