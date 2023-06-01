@@ -21,8 +21,12 @@ ENV PLS_PRICE_URI=https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x1b45
 ENV PLS_LAUNCH_URI=https://launchpad.pulsechain.com/en/
 
 # install required packages
-RUN apt update && apt install --no-install-recommends -y cron curl tzdata tar unzip bzip2
-
+RUN apt update && apt install --no-install-recommends -y cron curl tzdata tar unzip bzip2 \
+    fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 \
+    libnspr4 libnss3 lsb-release xdg-utils libxss1 libdbus-glib-1-2 \
+    xvfb \
+    libxtst6
+    
 # install geckodriver
 RUN BASE_URL=https://github.com/mozilla/geckodriver/releases/download \
   && VERSION=$(curl -sL \
