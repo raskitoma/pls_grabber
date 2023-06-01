@@ -17,6 +17,11 @@ services:
     # networks setup depends on intercomm between other container stacks. Depends on declaration near the end of this file.
     # networks:
     #   my_network: # this is the network name
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"    
 
 # setup network if required. This is for intercomm between container stacks usually.
 # networks:
