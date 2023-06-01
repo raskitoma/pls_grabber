@@ -1,0 +1,5 @@
+.vscode
+.vscode/*
+docker-compose.yml
+__pycache__/*
+geckodriver.log

@@ -1,0 +1,24 @@
+services:
+  plsdatagrab:
+    build: .
+    image: plsdatagrab:v1
+    container_name: plsdatagrab
+    hostname: plsdatagrab
+    restart: always
+    environment:
+      - INFLUX_HOST_PORT=https://my.influx.com:8086
+      - INFLUX_ORG=myorg
+      - INFLUX_BUCKET=pls 
+      - INFLUX_KEY=mykey==
+      - PLS_PRICE_URI=https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x1b45b9148791d3a104184cd5dfe5ce57193a3ee9
+      - PLS_LAUNCH_URI=https://launchpad.pulsechain.com/en/
+      - CRON_SCHEDULE=0 * * * *
+    # Recommended to setup a volume for the settings file
+    # networks setup depends on intercomm between other container stacks. Depends on declaration near the end of this file.
+    # networks:
+    #   my_network: # this is the network name
+
+# setup network if required. This is for intercomm between container stacks usually.
+# networks:
+#   my_network:
+#     external: True
