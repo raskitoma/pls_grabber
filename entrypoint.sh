@@ -1,7 +1,8 @@
 #!/bin/sh
 echo "==================== Starting PLS Data Grabber..."
-echo "Current config variables:"
-env | grep INFLUX_
+echo "Current config variables (some of them hidden for security purposes):"
+env | grep INFLUX_HOST_PORT
+env | grep INFLUX_BUCKET
 env | grep PLS_
 env | grep CRON_
 
