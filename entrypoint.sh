@@ -1,15 +1,18 @@
 #!/bin/sh
-
 echo "==================== Starting PLS Data Grabber..."
-echo "==================== Setting up cron task..."
+echo "Current config variables:"
+env | grep INFLUX_
+env | grep PLS_
+env | grep CRON_
 
+echo "==================== Setting up cron task..."
 # Set up the cron job
 echo "$CRON_SCHEDULE /usr/local/bin/python /app/plsgrabber.py > /proc/1/fd/1 2>&1" | crontab -
-crontab -l
 
 echo "==================== Task created..."
+crontab -l
 
-echo "==================== Running first time..."
+echo "==================== First run..."
 /usr/local/bin/python /app/plsgrabber.py
 
 echo "==================== Starting cron..."
