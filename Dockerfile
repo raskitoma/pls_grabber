@@ -11,6 +11,7 @@ ENV LC_ALL C.UTF-8
 ENV LC_ALL=C.UTF-8
 ENV PYTHONUNBUFFERED=1
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PATH "${PATH}:/usr/bin:/opt"
 # customizable env vars via docker-compose
 ENV INFLUX_HOST_PORT=https://my.influx.com:8086
 ENV INFLUX_ORG=myorg
@@ -43,6 +44,9 @@ RUN apt-get autoremove -y
 
 # create required folders
 RUN mkdir -p /app
+
+# setting workdir
+WORKDIR /app
 
 # Copy the requirements file into the container
 COPY requirements.txt .
