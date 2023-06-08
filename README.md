@@ -15,9 +15,12 @@ This is an script that runs periodically to multiple data from PLS and stores it
 > - `INFLUX_ORG` - The organization where you created the bucket and token
 > - `INFLUX_BUCKET` - The bucket where you want to store the data, default is `pls`
 > - `INFLUX_KEY` - The token with write access to the bucket
-> - `PLS_PRICE_URI` - URL to get price data, Default is Dexscreener API.
+> - `PLS_PRICE_URI` - URL to get price data, Default is CoinMarketCap API.
+> - `PLS_PRICE_API_KEY` - ApiKey obtained from CoinMarketCap (use free version)
 > - `PLS_LAUNCH_URI` - URL where PLS staking, validator and APR resides. Default is PLS launchpad site.
 > - `CRON_SCHEDULE` - Cron configuration, uses std cron format. Default is every hour. (Please don't abuse the API and sites)
+> - `CRON_PRICE` - Cron configuration, uses std cron format. Default is every 5 minutes. (Please don't abuse the API and sites)
+
 
 4. Run with `docker-compose.yml build && docker-compose.yml up -d`. Please be patient, it takes a while, because it has to install some packages and, since it depends on Selenium, it has to download the browser and the driver.
 

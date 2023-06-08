@@ -6,15 +6,11 @@ import logging
 import json
 import os
 import influxdb_client
-from selenium import webdriver
-from pyvirtualdisplay import Display
 from influxdb_client.client.write_api import SYNCHRONOUS
-from bs4 import BeautifulSoup
 
 # program vars
 everything_ok = True
-env_vars = ['INFLUX_HOST_PORT', 'INFLUX_ORG', 'INFLUX_BUCKET', 'INFLUX_KEY', 'PLS_PRICE_URI', 'PLS_LAUNCH_URI', 'PLS_PRICE_API_KEY']
-page_obj = ['Total PLS staked', 'Total validators', 'Current APR']
+env_vars = ['INFLUX_HOST_PORT', 'INFLUX_ORG', 'INFLUX_BUCKET', 'INFLUX_KEY', 'PLS_PRICE_URI', 'PLS_PRICE_API_KEY']
 not_set = []
 my_envars = []
 page_data = []
@@ -36,46 +32,14 @@ if not everything_ok:
 else:
     # get PLS price
     try:
-        headers = {'X-CMC_PRO_API_KEY': my_envars[6]}
+        headers = {'X-CMC_PRO_API_KEY': my_envars[5]}
         response = requests.get(my_envars[4], headers=headers)
         data = json.loads(response.text)
         price_usd = float(data['data']['11145']['quote']['USD']['price'])
     except Exception as e:
         logging.info(f"{get_time()} | Error getting data from price API: {str(e)}")
         everything_ok = False
-    
-    # get PLS Total Staked, Validator count and APR
-    # Setting virtual display, if needed
-    try:
-        display = Display(visible=0, size=(1920, 1080))
-        display.start()
-        logging.info(f"{get_time()} | Virtual display initialized.")
-    except Exception as e:
-        logging.info(f"{get_time()} | Virtual display not needed, using gecko.")
-
-    try:
-        # creating Selenium browser object
-        browser = webdriver.Firefox()
-        logging.info(f"{get_time()} | Opening {my_envars[5]}")
-        browser.get(my_envars[5])
-        time.sleep(5)
-        browser.implicitly_wait(10)
-        html = browser.page_source
-        browser.quit()
-        soup = BeautifulSoup(html, 'html.parser')
-        # checking data from staking page
-        for my_obj in page_obj:
-            h3 = soup.find('h3', text=my_obj)
-            span1 = h3.find_next_sibling('span')
-            span2 = span1.find('span')
-            text = span2.text
-            text = text.replace(',', '').replace(' ', '').replace('PLS', '').replace('%', '')
-            text = float(text)
-            page_data.append(text)
-    except Exception as e:
-        logging.info(f"{get_time()} | Error getting data from launchpad page: {str(e)}")
-        everything_ok = False
-        
+            
 # writing data to influxdb
 if everything_ok:
     try:
@@ -85,7 +49,7 @@ if everything_ok:
             org=f"{my_envars[1]}"
         )
         write_api = client.write_api(write_options=SYNCHRONOUS)
-        p = influxdb_client.Point("pls_data").field("pls_price", price_usd).field("pls_staked", page_data[0]).field("pls_validators", page_data[1]).field("pls_apr", page_data[2])
+        p = influxdb_client.Point("pls_data").field("pls_price", price_usd)
         write_api.write(bucket=f"{my_envars[2]}", record=p)
         logging.info(f"{get_time()} | Data written to influxdb.")
     except Exception as e:

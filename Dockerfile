@@ -18,9 +18,11 @@ ENV INFLUX_HOST_PORT=https://my.influx.com:8086
 ENV INFLUX_ORG=myorg
 ENV INFLUX_BUCKET=pls 
 ENV INFLUX_KEY=mykey==
-ENV PLS_PRICE_URI=https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x1b45b9148791d3a104184cd5dfe5ce57193a3ee9
+ENV PLS_PRICE_URI=https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=11145
+ENV PLS_PRICE_API_KEY=mykey==
 ENV PLS_LAUNCH_URI=https://launchpad.pulsechain.com/en/
 ENV CRON_SCHEDULE="0 * * * *"
+ENV CRON_PRICE="*/5 * * * *"
 
 # install required packages
 RUN apt update && apt install --no-install-recommends -y cron curl tzdata tar unzip bzip2 \
