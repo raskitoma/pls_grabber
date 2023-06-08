@@ -64,6 +64,7 @@ RUN /usr/local/bin/python -m pip install --no-cache-dir -r requirements.txt
 
 # Copy the script into the container
 COPY plsgrabber.py .
+COPY pls_price_grabber.py .
 
 # Copy the entrypoint script into the container
 COPY entrypoint.sh .
